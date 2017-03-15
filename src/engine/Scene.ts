@@ -4,11 +4,15 @@ export default class Scene extends THREE.Scene {
 
   private meshes: THREE.Mesh[];
 
+  private genericMaterial: THREE.MeshLambertMaterial;
+
   constructor() {
     super();
     this.meshes = [];
+    this.genericMaterial = new THREE.MeshLambertMaterial({ color: 0xff00ff });
     this.initLight();
     this.initMeshes();
+    this.initGround();
   }
 
   initLight() {
@@ -25,6 +29,13 @@ export default class Scene extends THREE.Scene {
     let material = new THREE.MeshLambertMaterial({ color: 0xff00ff });
     let mesh = new THREE.Mesh(geometry, material);
     mesh.position.set(0, 0, -1000);
+    this.meshes.push(mesh);
+    this.add(mesh);
+  }
+
+  initGround() {
+    let gridGeometry = new THREE.PlaneBufferGeometry(1, 1, 256, 256);
+    let mesh = new THREE.Mesh(gridGeometry, this.genericMaterial);
     this.meshes.push(mesh);
     this.add(mesh);
   }

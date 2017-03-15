@@ -55,7 +55,7 @@ export default class FirstPersonControls {
 
     private init() {
         // if (this.canvas !== document) {
-        //     this.domElement.setAttribute('tabindex', -1);
+        //     this.canvas.setAttribute('tabindex', -1);
         // }
         this.canvas.addEventListener('contextmenu', function (event) { event.preventDefault(); }, false);
 
@@ -74,15 +74,15 @@ export default class FirstPersonControls {
 
     private handleResize = function () {
 
-        if (this.domElement === document) {
+        if (this.canvas === document) {
 
             this.viewHalfX = window.innerWidth / 2;
             this.viewHalfY = window.innerHeight / 2;
 
         } else {
 
-            this.viewHalfX = this.domElement.offsetWidth / 2;
-            this.viewHalfY = this.domElement.offsetHeight / 2;
+            this.viewHalfX = this.canvas.offsetWidth / 2;
+            this.viewHalfY = this.canvas.offsetHeight / 2;
 
         }
 
@@ -90,9 +90,9 @@ export default class FirstPersonControls {
 
     private onMouseDown = function (event) {
 
-        if (this.domElement !== document) {
+        if (this.canvas !== document) {
 
-            this.domElement.focus();
+            this.canvas.focus();
 
         }
 
@@ -136,15 +136,15 @@ export default class FirstPersonControls {
 
     private onMouseMove = function (event) {
 
-        if (this.domElement === document) {
+        if (this.canvas === document) {
 
             this.mouseX = event.pageX - this.viewHalfX;
             this.mouseY = event.pageY - this.viewHalfY;
 
         } else {
 
-            this.mouseX = event.pageX - this.domElement.offsetLeft - this.viewHalfX;
-            this.mouseY = event.pageY - this.domElement.offsetTop - this.viewHalfY;
+            this.mouseX = event.pageX - this.canvas.offsetLeft - this.viewHalfX;
+            this.mouseY = event.pageY - this.canvas.offsetTop - this.viewHalfY;
 
         }
 
@@ -198,13 +198,13 @@ export default class FirstPersonControls {
 
     };
 
-    private step = function (delta) {
+    public step = function (delta) {
 
         if (this.enabled === false) return;
 
         if (this.heightSpeed) {
 
-            var y = THREE.Math.clamp(this.object.position.y, this.heightMin, this.heightMax);
+            var y = THREE.Math.clamp(this.camera.position.y, this.heightMin, this.heightMax);
             var heightDelta = y - this.heightMin;
 
             this.autoSpeedFactor = delta * (heightDelta * this.heightCoef);
@@ -217,14 +217,14 @@ export default class FirstPersonControls {
 
         var actualMoveSpeed = delta * this.movementSpeed;
 
-        if (this.moveForward || (this.autoForward && !this.moveBackward)) this.object.translateZ(- (actualMoveSpeed + this.autoSpeedFactor));
-        if (this.moveBackward) this.object.translateZ(actualMoveSpeed);
+        if (this.moveForward || (this.autoForward && !this.moveBackward)) this.camera.translateZ(- (actualMoveSpeed + this.autoSpeedFactor));
+        if (this.moveBackward) this.camera.translateZ(actualMoveSpeed);
 
-        if (this.moveLeft) this.object.translateX(- actualMoveSpeed);
-        if (this.moveRight) this.object.translateX(actualMoveSpeed);
+        if (this.moveLeft) this.camera.translateX(- actualMoveSpeed);
+        if (this.moveRight) this.camera.translateX(actualMoveSpeed);
 
-        if (this.moveUp) this.object.translateY(actualMoveSpeed);
-        if (this.moveDown) this.object.translateY(- actualMoveSpeed);
+        if (this.moveUp) this.camera.translateY(actualMoveSpeed);
+        if (this.moveDown) this.camera.translateY(- actualMoveSpeed);
 
         var actualLookSpeed = delta * this.lookSpeed;
 
@@ -257,13 +257,13 @@ export default class FirstPersonControls {
         }
 
         var targetPosition = this.target,
-            position = this.object.position;
+            position = this.camera.position;
 
         targetPosition.x = position.x + 100 * Math.sin(this.phi) * Math.cos(this.theta);
         targetPosition.y = position.y + 100 * Math.cos(this.phi);
         targetPosition.z = position.z + 100 * Math.sin(this.phi) * Math.sin(this.theta);
 
-        this.object.lookAt(targetPosition);
+        this.camera.lookAt(targetPosition);
 
     };
 

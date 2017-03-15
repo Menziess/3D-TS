@@ -55,7 +55,7 @@ const loop = () => {
 
     // Calculate delta
     let now = Date.now(),
-      delta = now - (lastRender || now);
+      delta = (now - (lastRender || now)) / 1000;
 
     // Display fps
     if (now - lastFps > 1000) {
@@ -70,7 +70,9 @@ const loop = () => {
     lastRender = now;
     frames++;
 
-    scene.step(delta / 1000);
+    // Update logic
+    camera.step(delta);
+    scene.step(delta);
   }
 }
 
