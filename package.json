@@ -1,8 +1,8 @@
 {
   "name": "app",
   "version": "1.0.0",
-  "description": "A react app",
-  "main": "dist/app-client.js",
+  "description": "A typescript app",
+  "main": "dist/index.js",
   "compilerOptions": {
     "skipLibCheck": true
   },
@@ -10,7 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "start http://localhost:3000 && nodemon --watch dist dist/app-server.js",
     "watch": "tsc --watch",
-    "watchify": "watchify dist/app-client.js -o public/js/bundle.js",
+    "watchify": "watchify dist/engine/main.js -o public/js/bundle.js",
     "compile": "tsc",
     "dev": "concurrently --kill-others \"npm run watch\" \"npm run watchify\" \"npm run start\""
   },
