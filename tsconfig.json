@@ -1,0 +1,25 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "outDir": "dist",
+    "rootDir": "src",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strictNullChecks": true,
+    "moduleResolution": "node",
+    "sourceMap": false,
+    "allowJs": true,
+    "jsx": "react",
+    "lib": [
+      "es2017", "dom"
+    ]
+  },
+  "awesomeTypescriptLoaderOptions": {
+    "forkChecker": true
+  },
+  "include": [
+    "src"
+  ]
+}
