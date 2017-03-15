@@ -34,10 +34,8 @@ export default class Scene extends THREE.Scene {
   }
 
   initGround() {
-    let gridGeometry = new THREE.PlaneBufferGeometry(1, 1, 256, 256);
-    let mesh = new THREE.Mesh(gridGeometry, this.genericMaterial);
-    this.meshes.push(mesh);
-    this.add(mesh);
+    let grid = new THREE.GridHelper(200, 10);
+    this.add(grid);
   }
 
   step(delta: number) {
