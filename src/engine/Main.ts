@@ -71,8 +71,8 @@ const loop = () => {
     frames++;
 
     // Update logic
-    camera.step(delta / 5);
-    scene.step(delta / 1000);
+    camera.step(delta);
+    scene.step(delta);
   }
 }
 

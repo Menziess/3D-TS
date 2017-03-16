@@ -8,14 +8,16 @@ export default class FirstPersonControls {
   private target = new THREE.Vector3(0, 0, -1000);
 
   private enabled = true;
+  private activeLook = false;
 
-  private movementSpeed = 1.0;
-  private lookSpeed = 0.005;
+  private movementSpeed = 0.08;
+  private lookSpeed = 0.08;
+
+  private movementSpeedFast = 3 * this.movementSpeed;
+  private movementSpeedSlow = this.movementSpeed;
 
   private lookVertical = true;
   private autoForward = false;
-
-  private activeLook = false;
 
   private heightSpeed = false;
   private heightCoef = 1.0;
@@ -40,9 +42,8 @@ export default class FirstPersonControls {
   private moveBackward = false;
   private moveLeft = false;
   private moveRight = false;
-
-  private viewStartX = 0;
-  private viewStartY = 0;
+  private moveUp = false;
+  private moveDown = false;
 
   constructor(camera: THREE.Camera, canvas: HTMLCanvasElement) {
     this.camera = camera;
@@ -60,18 +61,32 @@ export default class FirstPersonControls {
     this.canvas.addEventListener('mousemove', this.bind(this, this.onMouseMove), false);
     this.canvas.addEventListener('mousedown', this.bind(this, this.onMouseDown), false);
     this.canvas.addEventListener('mouseup', this.bind(this, this.onMouseUp), false);
+    document.addEventListener('pointerlockchange', this.bind(this, this.lockChange), false);
     window.addEventListener('keydown', this.bind(this, this.onKeyDown), false);
     window.addEventListener('keyup', this.bind(this, this.onKeyUp), false);
   }
 
 
   /**
+   * Lock change event
+   */
+  private lockChange() {
+    if (document.pointerLockElement) {
+      // this.activeLook = true;
+    } else {
+      this.activeLook = false;
+    }
+  }
+
+
+  /**
    * Mousedown event
    */
-  private onMouseDown = function (event) {
-    if (this.canvas !== document) this.canvas.focus();
-    this.viewStartX = event.pageX;
-    this.viewStartY = event.pageY;
+  private onMouseDown(event) {
+    if (!document.pointerLockElement && event.which === 3) {
+      this.canvas.requestPointerLock();
+    }
+    document.body.style.cursor = "pointer";
     this.activeLook = true;
   };
 
@@ -79,29 +94,29 @@ export default class FirstPersonControls {
   /**
    * Mouseup event
    */
-  private onMouseUp = function (event) {
-    this.activeLook = false;
-    this.mouseX = 0;
-    this.mouseY = 0;
+  private onMouseUp(event) {
+    if (!document.pointerLockElement)
+      this.activeLook = false;
+    document.body.style.cursor = "default";
   };
 
 
   /**
    * Mousemove event
    */
-  private onMouseMove = function (event) {
-    if (this.activeLook) {
-      this.mouseX = event.pageX - this.viewStartX;
-      this.mouseY = event.pageY - this.viewStartY;
-    }
+  private onMouseMove(event) {
+    this.mouseX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
+    this.mouseY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
   };
 
 
   /**
    * Step
    */
-  public step = function (delta) {
+  public step(delta) {
+
     if (this.enabled === false) return;
+
     if (this.heightSpeed) {
       let y = THREE.Math.clamp(this.camera.position.y, this.heightMin, this.heightMax);
       let heightDelta = y - this.heightMin;
@@ -110,31 +125,30 @@ export default class FirstPersonControls {
       this.autoSpeedFactor = 0.0;
     }
 
+    // MOVEMENT
     let actualMoveSpeed = delta * this.movementSpeed;
 
     if (this.moveForward || (this.autoForward && !this.moveBackward)) this.camera.translateZ(- (actualMoveSpeed + this.autoSpeedFactor));
     if (this.moveBackward) this.camera.translateZ(actualMoveSpeed);
     if (this.moveLeft) this.camera.translateX(- actualMoveSpeed);
     if (this.moveRight) this.camera.translateX(actualMoveSpeed);
-    if (this.moveUp) this.camera.translateY(actualMoveSpeed);
-    if (this.moveDown) this.camera.translateY(- actualMoveSpeed);
+    if (this.moveUp) this.camera.translateY(actualMoveSpeed / 2);
+    if (this.moveDown) this.camera.translateY(- actualMoveSpeed / 2);
 
-    let actualLookSpeed = delta * this.lookSpeed;
-
-    if (!this.activeLook) {
-      actualLookSpeed = 0;
-    }
-
+    // DIRECTION
     let verticalLookRatio = 1;
 
     if (this.constrainVertical) {
       verticalLookRatio = Math.PI / (this.verticalMax - this.verticalMin);
     }
 
+    let actualLookSpeed = (this.activeLook) ? this.lookSpeed * delta : 0;
+
     this.lon += this.mouseX * actualLookSpeed;
     if (this.lookVertical) this.lat -= this.mouseY * actualLookSpeed * verticalLookRatio;
 
     this.lat = Math.max(- 85, Math.min(85, this.lat));
+
     this.phi = THREE.Math.degToRad(90 - this.lat);
 
     this.theta = THREE.Math.degToRad(this.lon);
@@ -151,21 +165,23 @@ export default class FirstPersonControls {
     targetPosition.z = position.z + 100 * Math.sin(this.phi) * Math.sin(this.theta);
 
     this.camera.lookAt(targetPosition);
+    this.mouseX = 0;
+    this.mouseY = 0;
   };
 
 
   /**
    * Keydown event
    */
-  private onKeyDown = function (event) {
+  private onKeyDown(event) {
     switch (event.keyCode) {
-      case 16: /*shift*/  this.movementSpeed = 2.0; break;
+      case 16: /*shift*/  this.movementSpeed = this.movementSpeedFast; break;
       case 87: /*W*/      this.moveForward = true; break;
       case 65: /*A*/      this.moveLeft = true; break;
       case 83: /*S*/      this.moveBackward = true; break;
       case 68: /*D*/      this.moveRight = true; break;
       case 32: /*space*/  this.moveUp = true; break;
-      case 88: /*X*/      this.moveDown = true; break;
+      case 70: /*X*/      this.moveDown = true; break;
     }
   };
 
@@ -173,15 +189,15 @@ export default class FirstPersonControls {
   /**
    * Keyup event
    */
-  private onKeyUp = function (event) {
+  private onKeyUp(event) {
     switch (event.keyCode) {
-      case 16: /*shift*/  this.movementSpeed = 1.0; break;
+      case 16: /*shift*/  this.movementSpeed = this.movementSpeedSlow; break;
       case 87: /*W*/      this.moveForward = false; break;
       case 65: /*A*/      this.moveLeft = false; break;
       case 83: /*S*/      this.moveBackward = false; break;
       case 68: /*D*/      this.moveRight = false; break;
       case 32: /*space*/  this.moveUp = false; break;
-      case 88: /*X*/      this.moveDown = false; break;
+      case 70: /*X*/      this.moveDown = false; break;
     }
   };
 

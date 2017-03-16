@@ -39,6 +39,7 @@ export default class Scene extends THREE.Scene {
   }
 
   step(delta: number) {
+    delta = delta / 1000;
     this.meshes[0].rotation.x += delta;
     this.meshes[0].rotation.y += delta;
   }
