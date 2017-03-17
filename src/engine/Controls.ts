@@ -11,7 +11,7 @@ export default class FirstPersonControls {
   private activeLook = false;
 
   private movementSpeed = 0.08;
-  private lookSpeed = 0.08;
+  private lookSpeed = 0.06;
 
   private movementSpeedFast = 3 * this.movementSpeed;
   private movementSpeedSlow = this.movementSpeed;
@@ -51,6 +51,10 @@ export default class FirstPersonControls {
     this.init();
   }
 
+  public hasUserInput()
+  {
+    return this.activeLook;
+  }
 
   /**
    * Initialization
@@ -72,7 +76,7 @@ export default class FirstPersonControls {
    */
   private lockChange() {
     if (document.pointerLockElement) {
-      // this.activeLook = true;
+      
     } else {
       this.activeLook = false;
     }

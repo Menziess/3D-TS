@@ -3,7 +3,7 @@ import Controls from './Controls';
 
 export default class Camera extends THREE.PerspectiveCamera {
 
-    private controls: Controls;
+    public controls: Controls;
 
     constructor(fov: number, near: number, far: number, canvas: HTMLCanvasElement) {
         let width = 800;

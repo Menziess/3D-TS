@@ -17,6 +17,8 @@ const camera = new Camera(70, 0.1, 10000, canvas);
 
 const scene = new Scene();
 
+let running = true;
+
 
 /**
  * RESIZE MANAGEMENT
@@ -35,7 +37,16 @@ const updateDimensions = () => {
  */
 const init = () => {
   window.addEventListener("resize", updateDimensions.bind(this));
+  fpsMeter.addEventListener("click", pause.bind(this), false);
   updateDimensions();
+}
+
+
+/**
+ * Pause loop when tab is inactive
+ */
+const pause = () => {
+  running = !running;
 }
 
 
@@ -52,27 +63,44 @@ const loop = () => {
   draw();
 
   function draw() {
+    console.log(
+      '\ndocument hidden: ' + document.hidden +
+      '\nrunning: ' + running +
+      '\nhasUserInput: ' + camera.controls.hasUserInput()
+    );
+    if (document.hidden) {
+      running = false;
+    }
 
     // Calculate delta
     let now = Date.now(),
       delta = now - (lastRender || now);
 
     // Display fps
-    if (now - lastFps > 1000) {
+    if (now - lastFps > 999) {
       fpsMeter.innerText = frames.toString();
       lastFps = now;
       frames = 0;
     }
 
-    // Render frame
-    requestAnimationFrame(draw);
-    renderer.render(scene, camera);
-    lastRender = now;
-    frames++;
+    // When tab is inactive
+    if (running) {
+      camera.step(delta);
+      scene.step(delta);
+      render();
+    } else if (camera.controls.hasUserInput()) {
+      camera.step(delta);
+      render();
+    }
 
-    // Update logic
-    camera.step(delta);
-    scene.step(delta);
+    // Render frame
+    function render() {
+      renderer.render(scene, camera);
+      requestAnimationFrame(draw);
+      lastRender = now;
+      frames++;
+    }
+
   }
 }
 
