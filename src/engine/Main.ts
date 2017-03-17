@@ -13,9 +13,9 @@ const canvas = <HTMLCanvasElement>document.getElementById('canvas');
 
 const renderer = new Renderer({ canvas: canvas, antialias: true });
 
-const camera = new Camera(35, 0.1, 10000, canvas);
+const camera = new Camera(55, 0.1, 10000, canvas);
 
-const scene = new Scene();
+const scene = new Scene(camera);
 
 let running = true;
 

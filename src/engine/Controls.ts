@@ -5,7 +5,7 @@ export default class FirstPersonControls {
   private camera: THREE.Camera;
   private canvas: HTMLCanvasElement;
 
-  private target = new THREE.Vector3(0, 0, -1000);
+  private target = new THREE.Vector3(0, 0, 0);
 
   private enabled = true;
   private activeLook = false;
@@ -17,22 +17,8 @@ export default class FirstPersonControls {
   private movementSpeedFast = 3 * this.movementSpeed;
   private movementSpeedSlow = this.movementSpeed;
 
-  private lookVertical = true;
-  private autoForward = false;
-
-  private heightSpeed = false;
-  private heightCoef = 1.0;
-  private heightMin = 0.0;
-  private heightMax = 1.0;
-
-  private constrainVertical = false;
-  private verticalMin = 0;
-  private verticalMax = Math.PI;
-
-  private autoSpeedFactor = 0.0;
-
-  private mouseX = 0;
-  private mouseY = 0;
+  private movementX = 0;
+  private movementY = 0;
 
   private lat = 0;
   private lon = 0;
@@ -46,22 +32,42 @@ export default class FirstPersonControls {
   private moveUp = false;
   private moveDown = false;
 
+  private pitchObject: THREE.Object3D;
+  private yawObject: THREE.Object3D;
+
+  private PI_2 = Math.PI / 2;
+
   constructor(camera: THREE.Camera, canvas: HTMLCanvasElement) {
     this.camera = camera;
     this.canvas = canvas;
+    this.movementSpeed = this.movementSpeedFast;
+    this.pitchObject = new THREE.Object3D();
+    this.yawObject = new THREE.Object3D();
     this.init();
   }
 
-  public hasUserInput()
-  {
+
+  /**
+   * Get camera's yawobject
+   */
+  public getYawObject() {
+    return this.yawObject;
+  }
+
+
+  /**
+   * User is moving camera
+   */
+  public hasUserInput() {
     return this.activeLook;
   }
+
 
   /**
    * Initialization
    */
-  private init = function () {
-    if (this.canvas !== document) this.canvas.setAttribute('tabindex', -1);
+  private init() {
+    // if (this.canvas !== document) this.canvas.setAttribute('tabindex', -1);
     this.canvas.addEventListener('contextmenu', function (event) { event.preventDefault(); }, false);
     this.canvas.addEventListener('mousemove', this.bind(this, this.onMouseMove), false);
     this.canvas.addEventListener('mousedown', this.bind(this, this.onMouseDown), false);
@@ -69,6 +75,9 @@ export default class FirstPersonControls {
     document.addEventListener('pointerlockchange', this.bind(this, this.lockChange), false);
     window.addEventListener('keydown', this.bind(this, this.onKeyDown), false);
     window.addEventListener('keyup', this.bind(this, this.onKeyUp), false);
+
+    this.yawObject.add(this.pitchObject);
+    this.pitchObject.add(this.camera);
   }
 
 
@@ -77,7 +86,7 @@ export default class FirstPersonControls {
    */
   private lockChange() {
     if (document.pointerLockElement) {
-      
+
     } else {
       this.activeLook = false;
     }
@@ -110,69 +119,53 @@ export default class FirstPersonControls {
    * Mousemove event
    */
   private onMouseMove(event) {
-    this.mouseX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
-    this.mouseY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
+    if (!this.enabled || !this.activeLook) return;
+
+    this.movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
+    this.movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
+
+    this.yawObject.rotation.y -= this.movementX * 0.002;
+    this.pitchObject.rotation.x -= this.movementY * 0.002;
+
+    this.pitchObject.rotation.x = Math.max(- this.PI_2, Math.min(this.PI_2, this.pitchObject.rotation.x));
   };
 
 
   /**
    * Step
+   * @param delta 
    */
-  public step(delta) {
+  public step(delta: number) {
 
-    if (this.enabled === false) return;
-
-    if (this.heightSpeed) {
-      let y = THREE.Math.clamp(this.camera.position.y, this.heightMin, this.heightMax);
-      let heightDelta = y - this.heightMin;
-      this.autoSpeedFactor = delta * (heightDelta * this.heightCoef);
-    } else {
-      this.autoSpeedFactor = 0.0;
-    }
+    if (!this.enabled) return;
 
     // MOVEMENT
     let actualMoveSpeed = delta * this.movementSpeed;
 
-    if (this.moveForward || (this.autoForward && !this.moveBackward)) this.camera.translateZ(- (actualMoveSpeed + this.autoSpeedFactor));
-    if (this.moveBackward) this.camera.translateZ(actualMoveSpeed);
-    if (this.moveLeft) this.camera.translateX(- actualMoveSpeed);
-    if (this.moveRight) this.camera.translateX(actualMoveSpeed);
-    if (this.moveUp) this.camera.translateY(actualMoveSpeed / 2);
-    if (this.moveDown) this.camera.translateY(- actualMoveSpeed / 2);
+    if (this.moveForward) this.yawObject.translateZ(- actualMoveSpeed);
+    if (this.moveBackward) this.yawObject.translateZ(actualMoveSpeed);
+    if (this.moveLeft) this.yawObject.translateX(- actualMoveSpeed);
+    if (this.moveRight) this.yawObject.translateX(actualMoveSpeed);
+    if (this.moveUp) this.yawObject.translateY(actualMoveSpeed / 2);
+    if (this.moveDown) this.yawObject.translateY(- actualMoveSpeed / 2);
 
-    // DIRECTION
-    let verticalLookRatio = 1;
+    // DIRECTION   
+    if (this.activeLook) {
 
-    if (this.constrainVertical) {
-      verticalLookRatio = Math.PI / (this.verticalMax - this.verticalMin);
+      let direction = new THREE.Vector3(0, 0, - 1);
+      let rotation = new THREE.Euler(0, 0, 0, "YXZ");
+
+      return function (v) {
+
+        rotation.set(this.pitchObject.rotation.x, this.yawObject.rotation.y, 0);
+
+        v.copy(direction).applyEuler(rotation);
+
+        return v;
+
+      };
     }
-
-    let actualLookSpeed = (this.activeLook) ? this.lookSpeed * delta : 0;
-
-    this.lon += this.mouseX * actualLookSpeed;
-    if (this.lookVertical) this.lat -= this.mouseY * actualLookSpeed * verticalLookRatio;
-
-    this.lat = Math.max(- 85, Math.min(85, this.lat));
-
-    this.phi = THREE.Math.degToRad(90 - this.lat);
-
-    this.theta = THREE.Math.degToRad(this.lon);
-
-    if (this.constrainVertical) {
-      this.phi = THREE.Math.mapLinear(this.phi, 0, Math.PI, this.verticalMin, this.verticalMax);
-    }
-
-    let targetPosition = this.target,
-      position = this.camera.position;
-
-    targetPosition.x = position.x + 100 * Math.sin(this.phi) * Math.cos(this.theta);
-    targetPosition.y = position.y + 100 * Math.cos(this.phi);
-    targetPosition.z = position.z + 100 * Math.sin(this.phi) * Math.sin(this.theta);
-
-    this.camera.lookAt(targetPosition);
-    this.mouseX = 0;
-    this.mouseY = 0;
-  };
+  }
 
 
   /**
@@ -180,7 +173,7 @@ export default class FirstPersonControls {
    */
   private onKeyDown(event) {
     switch (event.keyCode) {
-      case 16: /*shift*/  this.movementSpeed = this.movementSpeedFast; break;
+      case 16: /*shift*/  this.movementSpeed = this.movementSpeedSlow; break;
       case 87: /*W*/      this.moveForward = true; break;
       case 65: /*A*/      this.moveLeft = true; break;
       case 83: /*S*/      this.moveBackward = true; break;
@@ -196,7 +189,7 @@ export default class FirstPersonControls {
    */
   private onKeyUp(event) {
     switch (event.keyCode) {
-      case 16: /*shift*/  this.movementSpeed = this.movementSpeedSlow; break;
+      case 16: /*shift*/  this.movementSpeed = this.movementSpeedFast; break;
       case 87: /*W*/      this.moveForward = false; break;
       case 65: /*A*/      this.moveLeft = false; break;
       case 83: /*S*/      this.moveBackward = false; break;

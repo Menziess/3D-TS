@@ -9,8 +9,11 @@ export default class Camera extends THREE.PerspectiveCamera {
         let width = 800;
         let height = 600;
         super(fov, width / height, near, far);
-        this.position.set(0, 20, 0);
         this.controls = new Controls(this, canvas);
+    }
+
+    public getYawObject() {
+        return this.controls.getYawObject();
     }
 
     public step(delta: number) {

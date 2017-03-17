@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import Camera from './Camera';
 
 export default class Scene extends THREE.Scene {
 
@@ -6,13 +7,18 @@ export default class Scene extends THREE.Scene {
 
   private genericMaterial: THREE.MeshLambertMaterial;
 
-  constructor() {
+  constructor(camera: Camera) {
     super();
     this.meshes = [];
     this.genericMaterial = new THREE.MeshLambertMaterial({ color: 0xff00ff });
+    this.setCamera(camera);
     this.initLight();
     this.initMeshes();
     this.initGround();
+  }
+
+  setCamera(camera: Camera) {
+    this.add(camera.getYawObject());
   }
 
   initLight() {
