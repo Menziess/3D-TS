@@ -7,7 +7,9 @@ import Scene from './Scene';
 /**
  * INSTANTIATIONS 
  */
-const fpsMeter = <HTMLElement>document.getElementById('fps');
+const fpsMeter = <HTMLElement>document.getElementById('fpsMeter');
+
+const pauseButton = <HTMLElement>document.getElementById('pauseButton');
 
 const canvas = <HTMLCanvasElement>document.getElementById('canvas');
 
@@ -37,7 +39,7 @@ const updateDimensions = () => {
  * INITIALIZATION
  */
 const init = () => {
-  fpsMeter.addEventListener("click", pause.bind(this), false);
+  pauseButton.addEventListener("click", pause.bind(this), false);
   window.addEventListener("resize", updateDimensions.bind(this), false);
   updateDimensions();
 }
