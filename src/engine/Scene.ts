@@ -28,7 +28,7 @@ export default class Scene extends THREE.Scene {
     let geometry = new THREE.BoxGeometry(100, 100, 100);
     let material = new THREE.MeshLambertMaterial({ color: 0xff00ff });
     let mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set(0, 0, 300);
+    mesh.position.set(500, 0, 0);
     this.meshes.push(mesh);
     this.add(mesh);
   }
@@ -40,12 +40,12 @@ export default class Scene extends THREE.Scene {
 
   step(delta: number) {
     delta = delta / 1000;
-    // this.meshes[0].rotation.x += delta;
+    this.meshes[0].rotation.x += delta;
     this.meshes[0].rotation.y += delta;
-    // this.meshes[0].rotation.z += delta;
-    this.meshes[0].translateX(5);
-    // this.meshes[0].translateY(-5);
-    // this.meshes[0].translateZ(5);
+    this.meshes[0].rotation.z += delta;
+    // this.meshes[0].translateX(1);
+    // this.meshes[0].translateY(1);
+    // this.meshes[0].translateZ(1);
   }
 }
 

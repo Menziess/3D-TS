@@ -13,7 +13,7 @@ const canvas = <HTMLCanvasElement>document.getElementById('canvas');
 
 const renderer = new Renderer({ canvas: canvas, antialias: true });
 
-const camera = new Camera(70, 0.1, 10000, canvas);
+const camera = new Camera(35, 0.1, 10000, canvas);
 
 const scene = new Scene();
 
@@ -36,8 +36,8 @@ const updateDimensions = () => {
  * INITIALIZATION
  */
 const init = () => {
-  window.addEventListener("resize", updateDimensions.bind(this));
   fpsMeter.addEventListener("click", pause.bind(this), false);
+  window.addEventListener("resize", updateDimensions.bind(this), false);
   updateDimensions();
 }
 
@@ -63,11 +63,8 @@ const loop = () => {
   draw();
 
   function draw() {
-    console.log(
-      '\ndocument hidden: ' + document.hidden +
-      '\nrunning: ' + running +
-      '\nhasUserInput: ' + camera.controls.hasUserInput()
-    );
+
+    // Check if tab is active
     if (document.hidden) {
       running = false;
     }
@@ -75,6 +72,9 @@ const loop = () => {
     // Calculate delta
     let now = Date.now(),
       delta = now - (lastRender || now);
+
+    requestAnimationFrame(draw);
+    lastRender = now;
 
     // Display fps
     if (now - lastFps > 999) {
@@ -96,8 +96,6 @@ const loop = () => {
     // Render frame
     function render() {
       renderer.render(scene, camera);
-      requestAnimationFrame(draw);
-      lastRender = now;
       frames++;
     }
 

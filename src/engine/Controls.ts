@@ -9,6 +9,7 @@ export default class FirstPersonControls {
 
   private enabled = true;
   private activeLook = false;
+  private activeMove = false;
 
   private movementSpeed = 0.08;
   private lookSpeed = 0.06;
