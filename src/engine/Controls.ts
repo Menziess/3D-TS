@@ -5,25 +5,19 @@ export default class FirstPersonControls {
   private camera: THREE.Camera;
   private canvas: HTMLCanvasElement;
 
-  private target = new THREE.Vector3(0, 0, 0);
-
   private enabled = true;
-  private activeLook = false;
-  private activeMove = false;
 
   private movementSpeed = 0.08;
-  private lookSpeed = 0.06;
-
   private movementSpeedFast = 3 * this.movementSpeed;
   private movementSpeedSlow = this.movementSpeed;
 
   private movementX = 0;
   private movementY = 0;
 
-  private lat = 0;
-  private lon = 0;
-  private phi = 0;
-  private theta = 0;
+  private activeLook = false;
+  private pitchObject: THREE.Object3D;
+  private yawObject: THREE.Object3D;
+  private PI_2 = Math.PI / 2;
 
   private moveForward = false;
   private moveBackward = false;
@@ -32,10 +26,6 @@ export default class FirstPersonControls {
   private moveUp = false;
   private moveDown = false;
 
-  private pitchObject: THREE.Object3D;
-  private yawObject: THREE.Object3D;
-
-  private PI_2 = Math.PI / 2;
 
   constructor(camera: THREE.Camera, canvas: HTMLCanvasElement) {
     this.camera = camera;
@@ -59,7 +49,13 @@ export default class FirstPersonControls {
    * User is moving camera
    */
   public hasUserInput() {
-    return this.activeLook;
+    return this.activeLook
+      || this.moveForward
+      || this.moveBackward
+      || this.moveLeft
+      || this.moveRight
+      || this.moveUp
+      || this.moveDown;
   }
 
 
@@ -67,7 +63,6 @@ export default class FirstPersonControls {
    * Initialization
    */
   private init() {
-    // if (this.canvas !== document) this.canvas.setAttribute('tabindex', -1);
     this.canvas.addEventListener('contextmenu', function (event) { event.preventDefault(); }, false);
     this.canvas.addEventListener('mousemove', this.bind(this, this.onMouseMove), false);
     this.canvas.addEventListener('mousedown', this.bind(this, this.onMouseDown), false);
