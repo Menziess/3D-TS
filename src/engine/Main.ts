@@ -29,6 +29,7 @@ const updateDimensions = () => {
   camera.aspect = width / height;
   camera.updateProjectionMatrix();
   renderer.setSize(width, height);
+  renderer.render(scene, camera);
 }
 
 

@@ -9,10 +9,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "start http://localhost:3000 && nodemon --watch dist dist/app-server.js",
-    "watch": "tsc --watch",
+    "electron": "electron dist/app-client.js",
     "watchify": "watchify dist/engine/main.js -o public/js/bundle.js",
     "compile": "tsc",
-    "dev": "concurrently --kill-others \"npm run watch\" \"npm run watchify\" \"npm run start\""
+    "dev": "concurrently --kill-others \"tsc --watch\" \"npm run watchify\" \"npm run start\"",
+    "watch": "concurrently --kill-others \"tsc --watch\" \"npm run watchify\""
   },
   "keywords": [
     "app",
@@ -22,6 +23,7 @@
   "license": "ISC",
   "private": true,
   "dependencies": {
+    "electron": "^1.6.2",
     "express": "^4.0.35",
     "express-rewrite": "0.0.4",
     "oimo": "^1.0.5",
