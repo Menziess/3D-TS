@@ -68,6 +68,7 @@ export default class FirstPersonControls {
     this.canvas.addEventListener('mousedown', this.bind(this, this.onMouseDown), false);
     this.canvas.addEventListener('mouseup', this.bind(this, this.onMouseUp), false);
     document.addEventListener('pointerlockchange', this.bind(this, this.lockChange), false);
+    document.addEventListener('mouseout', this.bind(this, this.onMouseOut), true);
     window.addEventListener('keydown', this.bind(this, this.onKeyDown), false);
     window.addEventListener('keyup', this.bind(this, this.onKeyUp), false);
 
@@ -85,6 +86,14 @@ export default class FirstPersonControls {
     } else {
       this.activeLook = false;
     }
+  }
+  
+
+  /**
+   * Mouseout event
+   */
+  private onMouseOut(event) {
+    this.activeLook = false;
   }
 
 
