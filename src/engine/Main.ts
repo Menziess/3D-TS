@@ -17,7 +17,7 @@ const camera = new Camera(55, 0.1, 10000, canvas);
 
 const scene = new Scene(camera);
 
-let running = true;
+let running = false;
 
 
 /**

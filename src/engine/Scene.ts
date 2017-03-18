@@ -41,6 +41,12 @@ export default class Scene extends THREE.Scene {
 
   initGround() {
     let grid = new THREE.GridHelper(200, 10);
+    let matrix = new THREE.Matrix4();
+    matrix.set( 11, 12, 13, 14,
+       21, 22, 23, 24,
+       31, 32, 33, 34,
+       41, 42, 43, 44);
+    grid.applyMatrix(matrix);
     this.add(grid);
   }
 
