@@ -74,6 +74,7 @@ export default class FirstPersonControls {
 
     this.yawObject.add(this.pitchObject);
     this.pitchObject.add(this.camera);
+    this.yawObject.position.y = 10;
   }
 
 
