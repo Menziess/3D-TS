@@ -1,51 +1,66 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D - Typescript</title>
-    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
-    <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" href="/favicons/favicon-32x32.png" sizes="32x32">
-    <link rel="icon" type="image/png" href="/favicons/favicon-16x16.png" sizes="16x16">
-    <link rel="manifest" href="/favicons/manifest.json">
-    <link rel="mask-icon" href="/favicons/safari-pinned-tab.svg" color="#5bbad5">
-    <meta name="theme-color" content="#ffffff">
-    <style>
-      html, body {
-        margin: 0;
-        overflow: hidden;
-      }
 
-      canvas {
-        width: 100vw;
-        height: 100vh;
-        background: white;
-      }
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D - Typescript</title>
+  <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="/favicons/favicon-32x32.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="manifest" href="/favicons/manifest.json">
+  <link rel="mask-icon" href="/favicons/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="theme-color" content="#ffffff">
+  <style>
+    html,
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+    
+    canvas {
+      width: 100vw;
+      height: 100vh;
+      background: white;
+    }
+    
+    button {
+      background-color:crimson;
+      border: none;
+      color: white;
+      padding: 3px 6px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+    }
 
-      #menu {
-        position: absolute;
-        background: #16a085;
-        padding: 0.2em 0.4em 0.2em 0.4em;
-        color: white;
-      }
+    #menu {
+      position: absolute;
+      background: #16a085;
+      padding: 0.2em 0.4em 0.2em 0.4em;
+      color: white;
+    }
+  </style>
+</head>
 
-      #pauseButton {
-        cursor: pointer;
-        user-select: none;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="root">
-      <div id="menu">
-        <span>Fps: <span id="fpsMeter">0</span></span>
-        <br />
-        <div id="pauseButton">Pause: &#10074;&#10074;</div>
-      </div>
-      <canvas id="canvas"></canvas>
+<body>
+  <div id="root">
+    <div id="menu">
+
+      <button id="pauseButton">Pause &#10074;&#10074;</button>
+      <button id="selectSpawn">Respawn &#9851;</button>
+      <br />
+      <span>Fps: <span id="fpsMeter">0</span></span>
+      <br />
+      <span>Pos: <span id="posDisplay">?</span></span>
+
     </div>
-    <script src="./js/bundle.js"></script>
-  </body>
+    <canvas id="canvas"></canvas>
+  </div>
+  <script src="./js/bundle.js"></script>
+</body>
+
 </html>

@@ -7,7 +7,7 @@ export default class FirstPersonControls {
 
   private enabled = true;
 
-  private movementSpeed = 0.08;
+  private movementSpeed = 0.16;
   private movementSpeedFast = 3 * this.movementSpeed;
   private movementSpeedSlow = this.movementSpeed;
 
