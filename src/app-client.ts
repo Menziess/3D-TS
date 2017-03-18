@@ -23,6 +23,7 @@ let createWindow = () => {
       slashes: true,
     })
   );
+  mainWindow.setMenu(null);
 }
 
 app.on('ready', () => {

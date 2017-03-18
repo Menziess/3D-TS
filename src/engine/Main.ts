@@ -95,8 +95,6 @@ export default class Main {
       this.menu.elements['posDisplay'].innerText = Math.floor(position.x) + ", " + Math.floor(position.y) + ", " + Math.floor(position.z);
     }
 
-
-
     // When tab is inactive
     if (this.running) {
       this.camera.step(delta);
