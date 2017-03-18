@@ -4,7 +4,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D - Typescript</title>
-    <!--<link rel="stylesheet" href="./css/styles.css">-->
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
     <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
@@ -25,26 +24,28 @@
         background: white;
       }
 
-      #fps-meter {
+      #menu {
         position: absolute;
         background: #16a085;
         padding: 0.2em 0.4em 0.2em 0.4em;
         color: white;
       }
 
-      #fps {
+      #pauseButton {
         cursor: pointer;
+        user-select: none;
       }
     </style>
   </head>
   <body>
     <div id="root">
-      <div id="fps-meter">
-        Fps: <span id="fps">0</span>
+      <div id="menu">
+        <span>Fps: <span id="fpsMeter">0</span></span>
+        <br />
+        <div id="pauseButton">Pause: &#10074;&#10074;</div>
       </div>
       <canvas id="canvas"></canvas>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
     <script src="./js/bundle.js"></script>
   </body>
 </html>

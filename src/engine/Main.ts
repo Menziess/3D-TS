@@ -5,9 +5,11 @@ import Scene from './Scene';
 
 
 /**
- * INSTANTIATIONS 
+ * Instantiations
  */
-const fpsMeter = <HTMLElement>document.getElementById('fps');
+const fpsMeter = <HTMLElement>document.getElementById('fpsMeter');
+
+const pauseButton = <HTMLElement>document.getElementById('pauseButton');
 
 const canvas = <HTMLCanvasElement>document.getElementById('canvas');
 
@@ -21,7 +23,7 @@ let running = false;
 
 
 /**
- * RESIZE MANAGEMENT
+ * Resize
  */
 const updateDimensions = () => {
   let width = window.innerWidth;
@@ -34,10 +36,10 @@ const updateDimensions = () => {
 
 
 /**
- * INITIALIZATION
+ * Initialization
  */
 const init = () => {
-  fpsMeter.addEventListener("click", pause.bind(this), false);
+  pauseButton.addEventListener("click", pause.bind(this), false);
   window.addEventListener("resize", updateDimensions.bind(this), false);
   updateDimensions();
 }
@@ -52,7 +54,7 @@ const pause = () => {
 
 
 /**
- * GAME LOOP
+ * Loop
  */
 const loop = () => {
 
@@ -105,7 +107,7 @@ const loop = () => {
 
 
 /**
- * START
+ * Start
  */
 init();
 loop();
