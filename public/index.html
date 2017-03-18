@@ -27,7 +27,7 @@
     }
     
     button {
-      background-color:crimson;
+      background-color: crimson;
       border: none;
       color: white;
       padding: 3px 6px;
@@ -36,7 +36,7 @@
       display: inline-block;
       font-size: 16px;
     }
-
+    
     #menu {
       position: absolute;
       background: #16a085;
@@ -60,6 +60,19 @@
     </div>
     <canvas id="canvas"></canvas>
   </div>
+
+  <script type="x-shader/x-fragment" id="vertexShader">
+    attribute float vertexDisplacement; uniform float delta; varying float vOpacity; varying vec3 vUv; void main() { vUv = position;
+    vOpacity = vertexDisplacement; vec3 p = position; p.x += sin(vertexDisplacement) * 50.0; p.y += cos(vertexDisplacement)
+    * 50.0; vec4 modelViewPosition = modelViewMatrix * vec4(position, 1.0); gl_Position = projectionMatrix * modelViewPosition;
+    }
+  </script>
+
+  <script type="x-shader/x-fragment" id="fragmentShader">
+    uniform float delta; varying float vOpacity; varying vec3 vUv;void main() { float r = 1.0 + cos(vUv.x * delta); float g =
+    1.0 + sin(delta) * 0.5; float b = 0.0; gl_FragColor = vec4(r, g, b, vOpacity); }
+  </script>
+
   <script src="./js/bundle.js"></script>
 </body>
 
