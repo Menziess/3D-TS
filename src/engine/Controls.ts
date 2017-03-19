@@ -7,7 +7,7 @@ export default class FirstPersonControls {
 
   private enabled = true;
 
-  private movementSpeed = 0.16;
+  private movementSpeed = 0.30;
   private movementSpeedFast = 3 * this.movementSpeed;
   private movementSpeedSlow = this.movementSpeed;
 
@@ -151,8 +151,8 @@ export default class FirstPersonControls {
     if (this.moveBackward) this.yawObject.translateZ(actualMoveSpeed);
     if (this.moveLeft) this.yawObject.translateX(- actualMoveSpeed);
     if (this.moveRight) this.yawObject.translateX(actualMoveSpeed);
-    if (this.moveUp) this.yawObject.translateY(actualMoveSpeed / 2);
-    if (this.moveDown) this.yawObject.translateY(- actualMoveSpeed / 2);
+    if (this.moveUp) this.yawObject.translateY(actualMoveSpeed / 1.5);
+    if (this.moveDown) this.yawObject.translateY(- actualMoveSpeed / 1.5);
 
     // DIRECTION   
     if (this.activeLook) {
@@ -178,7 +178,7 @@ export default class FirstPersonControls {
    */
   private onKeyDown(event) {
     switch (event.keyCode) {
-      case 16: /*shift*/  this.movementSpeed = this.movementSpeedSlow; break;
+      case 16: /*shift*/  this.movementSpeed = this.movementSpeedFast; break;
       case 87: /*W*/      this.moveForward = true; break;
       case 65: /*A*/      this.moveLeft = true; break;
       case 83: /*S*/      this.moveBackward = true; break;
@@ -194,7 +194,7 @@ export default class FirstPersonControls {
    */
   private onKeyUp(event) {
     switch (event.keyCode) {
-      case 16: /*shift*/  this.movementSpeed = this.movementSpeedFast; break;
+      case 16: /*shift*/  this.movementSpeed = this.movementSpeedSlow; break;
       case 87: /*W*/      this.moveForward = false; break;
       case 65: /*A*/      this.moveLeft = false; break;
       case 83: /*S*/      this.moveBackward = false; break;
