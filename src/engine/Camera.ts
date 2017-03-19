@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import Controls from './Controls';
+import Controls from './utils/Controls';
 import Main from './Main';
 
 
@@ -15,7 +15,12 @@ export default class Camera extends THREE.PerspectiveCamera {
         this.controls = new Controls(this, canvas);
     }
 
-    public step(delta: number) {
+
+    /**
+     * Step
+     * @param delta 
+     */
+    public step (delta: number) {
         this.controls.step(delta);
     }
 }

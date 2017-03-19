@@ -25,7 +25,7 @@ export default class Main {
     this.camera = new Camera(this, 55, 0.1, 10000, this.canvas);
     this.scene = new Scene(this);
     this.menu = new Menu(this);
-    this.running = false;
+    this.running = true;
 
     this.lastRender = Date.now();
     this.targetFps = 1000 / 60;
@@ -68,6 +68,15 @@ export default class Main {
 
 
   /**
+   * Render frame
+   */
+  private render() {
+    this.renderer.render(this.scene, this.camera);
+    this.frames++;
+  }
+  
+
+  /**
    * Loop
    */
   private draw() {
@@ -103,12 +112,6 @@ export default class Main {
       this.camera.step(delta);
       this.render();
     }
-  }
-
-  // Render frame
-  private render = () => {
-    this.renderer.render(this.scene, this.camera);
-    this.frames++;
   }
 }
 

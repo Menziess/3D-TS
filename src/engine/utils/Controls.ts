@@ -106,7 +106,6 @@ export default class Controls {
     if (!document.pointerLockElement && event.which === 3) {
       this.canvas.requestPointerLock();
     }
-    document.body.style.cursor = "pointer";
     this.activeLook = true;
   };
 
@@ -117,7 +116,6 @@ export default class Controls {
   private onMouseUp(event) {
     if (!document.pointerLockElement)
       this.activeLook = false;
-    document.body.style.cursor = "default";
   };
 
 

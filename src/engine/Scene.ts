@@ -10,8 +10,6 @@ export default class Scene extends THREE.Scene {
 
   private defaultMaterial: THREE.MeshBasicMaterial;
 
-  private vertexDisplacement;
-
   constructor(main: Main) {
     super();
     this.main = main;
@@ -66,22 +64,21 @@ export default class Scene extends THREE.Scene {
    * Initializes terrain
    */
   initTerrain() {
-    const geometry = new THREE.PlaneBufferGeometry(1000, 1000, 50, 50);
-
-    // let vertexDisplacement = new Float32Array(geometry.getAttribute('position').count);
-    // for (let i = 0; i < vertexDisplacement.length; i++) {
-    //   vertexDisplacement[i] = Math.sin(i);
-    // }
-
-    // geometry.addAttribute('vertexDisplacement', new THREE.BufferAttribute(vertexDisplacement, 1));
-    // this.vertexDisplacement = vertexDisplacement;
+    const geometry = new THREE.PlaneBufferGeometry(window.innerWidth, window.innerHeight, 40);
 
     let mesh = new THREE.Mesh(geometry, this.defaultMaterial);
     mesh.rotateX(- Math.PI / 2);
+    this.meshes['water'] = mesh;
     this.add(mesh);
-    this.meshes['ground'] = mesh;
 
-    this.main.renderer.applyShaders(mesh);
+    this.main.renderer.applyShaders(mesh, () => {
+      let height = new Float32Array(geometry.getAttribute('position').count);
+      for (let i = 0; i < height.length; i++) {
+        height[i] = Math.sin(i);
+      }
+
+      geometry.addAttribute('height', new THREE.BufferAttribute(height, 1));
+    });
   }
 
 
@@ -90,23 +87,15 @@ export default class Scene extends THREE.Scene {
    * @param delta 
    */
   step(delta: number) {
+    delta = delta / 1000;
 
-    // GROUND
-    // this.meshes['ground'].material.uniforms.delta.value = 0.5 + Math.sin(delta) * 0.6;
-
-    // for(let i = 0; i < this.ground.vertices.length; i+= 2) {
-    //   this.ground.vertices[i].x += delta * 4;
-    // }
-    // this.ground.verticesNeedUpdate = true;
-
-    // for (var i = 0; i < this.vertexDisplacement.length; i++) {
-    //   this.vertexDisplacement[i] = 0.5 + Math.sin(i * delta) * 0.25;
-    // }
-
-    // this.meshes['ground'].geometry.attributes.vertexDisplacement.needsUpdate = true;
+    // Water
+    if (this.meshes['water'].material['uniforms']) {
+      this.meshes['water'].material.uniforms.delta.value += delta;
+      this.meshes['water'].geometry.attributes.height.needsUpdate = true;
+    }
 
     // CUBE
-    delta = delta / 1000;
     this.meshes['cube'].rotation.x += delta;
     this.meshes['cube'].rotation.y += delta;
     this.meshes['cube'].rotation.z += delta;

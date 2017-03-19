@@ -41,7 +41,7 @@ export default class Renderer extends THREE.WebGLRenderer {
    * Apply shaders to mesh
    * @param mesh
    */
-  public applyShaders(mesh: THREE.Mesh) {
+  public applyShaders(mesh: THREE.Mesh, callback) {
     if (!this.enableShaders) return;
 
     let vertexShader;
@@ -62,6 +62,8 @@ export default class Renderer extends THREE.WebGLRenderer {
         vertexShader: vertexShader,
         fragmentShader: fragmentShader,
       });
+
+      callback();
     }));
   }
 }
