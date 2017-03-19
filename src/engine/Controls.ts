@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 
-export default class FirstPersonControls {
+
+export default class Controls {
 
   private camera: THREE.Camera;
   private canvas: HTMLCanvasElement;

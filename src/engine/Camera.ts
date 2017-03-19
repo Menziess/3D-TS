@@ -1,19 +1,18 @@
 import * as THREE from 'three';
 import Controls from './Controls';
+import Main from './Main';
+
 
 export default class Camera extends THREE.PerspectiveCamera {
 
+    private main: Main;
     public controls: Controls;
 
-    constructor(fov: number, near: number, far: number, canvas: HTMLCanvasElement) {
-        let width = 800;
-        let height = 600;
+    constructor(main: Main, fov: number, near: number, far: number, canvas: HTMLCanvasElement) {
+        let width = 800, height = 600;
         super(fov, width / height, near, far);
+        this.main = main;
         this.controls = new Controls(this, canvas);
-    }
-
-    public getYawObject() {
-        return this.controls.getYawObject();
     }
 
     public step(delta: number) {

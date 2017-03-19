@@ -1,8 +1,10 @@
 import Main from './Main';
 
+
 export default class Menu {
 
   private main: Main;
+
   public elements: HTMLElement[];
 
   constructor(main) {
@@ -24,7 +26,7 @@ export default class Menu {
 
     this.elements['selectSpawn'].addEventListener("click", () => {
       this.elements['selectSpawn'].blur();
-      this.main.camera.getYawObject().position.set(-328, 568, 800);
+      this.main.camera.controls.getYawObject().position.set(-328, 568, 800);
       this.main.renderer.render(this.main.scene, this.main.camera);
     }, false);
   }

@@ -4,6 +4,7 @@ import Camera from './Camera';
 import Scene from './Scene';
 import Menu from './Menu';
 
+
 export default class Main {
 
   private lastRender: number;
@@ -20,9 +21,9 @@ export default class Main {
 
   constructor() {
     this.canvas = <HTMLCanvasElement>document.getElementById('canvas');
-    this.renderer = new Renderer({ canvas: this.canvas, antialias: true });
-    this.camera = new Camera(55, 0.1, 10000, this.canvas);
-    this.scene = new Scene(this.camera);
+    this.renderer = new Renderer(this, { canvas: this.canvas, antialias: true });
+    this.camera = new Camera(this, 55, 0.1, 10000, this.canvas);
+    this.scene = new Scene(this);
     this.menu = new Menu(this);
     this.running = false;
 
@@ -79,19 +80,17 @@ export default class Main {
     // Calculate delta
     let now = Date.now(),
       delta = now - (this.lastRender || now);
-
+    this.lastRender = now;
     requestAnimationFrame(() => {
       this.draw();
     });
-
-    this.lastRender = now;
 
     // Display fps and position
     if (now - this.lastFps > 999) {
       this.menu.elements['fpsMeter'].innerText = this.frames.toString();
       this.lastFps = now;
       this.frames = 0;
-      let position = this.camera.getYawObject().getWorldPosition();
+      let position = this.camera.controls.getYawObject().getWorldPosition();
       this.menu.elements['posDisplay'].innerText = Math.floor(position.x) + ", " + Math.floor(position.y) + ", " + Math.floor(position.z);
     }
 
