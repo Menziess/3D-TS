@@ -63,7 +63,7 @@ export default class Shaders {
         resolve(this.shadersHolder[shader]);
 
       } else {
-        
+
         let loader;
         switch (shader) {
           case "vertex":

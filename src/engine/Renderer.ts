@@ -43,17 +43,18 @@ export default class Renderer extends THREE.WebGLRenderer {
    */
   public applyShaders(mesh: THREE.Mesh) {
     if (!this.enableShaders) return;
-   
+
     let vertexShader;
     let fragmentShader;
 
     this.shaders.getShader('vertex').then((shader) => {
-      console.log(shader);
+
       vertexShader = shader;
+
     }).then(this.shaders.getShader('fragment').then((shader) => {
-      console.log(shader);
+
       fragmentShader = shader;
-    })).then(() => {
+
       mesh.material = new THREE.ShaderMaterial({
         uniforms: {
           delta: { value: 0 }
@@ -61,6 +62,6 @@ export default class Renderer extends THREE.WebGLRenderer {
         vertexShader: vertexShader,
         fragmentShader: fragmentShader,
       });
-    });
+    }));
   }
 }
