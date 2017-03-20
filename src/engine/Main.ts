@@ -97,10 +97,10 @@ export default class Main {
     // Display fps and position
     if (now - this.lastFps > 999) {
       this.menu.elements['fpsMeter'].innerText = this.frames.toString();
+      this.menu.elements['posDisplay'].innerText = this.camera.controls.getPosition();
+      this.menu.elements['rotDisplay'].innerText = this.camera.controls.getRotation();
       this.lastFps = now;
       this.frames = 0;
-      let position = this.camera.controls.getYawObject().getWorldPosition();
-      this.menu.elements['posDisplay'].innerText = Math.floor(position.x) + ", " + Math.floor(position.y) + ", " + Math.floor(position.z);
     }
 
     // When tab is inactive

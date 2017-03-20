@@ -17,6 +17,7 @@ export default class Menu {
     this.elements['selectSpawn'] = <HTMLElement>document.getElementById('selectSpawn');
     this.elements['pauseButton'] = <HTMLElement>document.getElementById('pauseButton');
     this.elements["posDisplay"] = <HTMLElement>document.getElementById('posDisplay');
+    this.elements["rotDisplay"] = <HTMLElement>document.getElementById('rotDisplay');
     this.elements["fpsMeter"] = <HTMLElement>document.getElementById('fpsMeter');
 
     this.elements['pauseButton'].addEventListener("click", () => {

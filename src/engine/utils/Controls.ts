@@ -47,6 +47,26 @@ export default class Controls {
 
 
   /**
+   * Get array of yaw position
+   */
+  public getPosition() {
+    return this.yawObject.getWorldPosition().toArray().map((number) => {
+      return ~~number;
+    });
+  }
+
+
+  /**
+   * Get array of pitch rotation
+   */
+  public getRotation() {
+    return [this.pitchObject.rotation.x, this.yawObject.rotation.y, 0].map((number) => {
+      return number.toFixed(2);
+    });
+  }
+
+
+  /**
    * User is moving camera
    */
   public hasUserInput() {
@@ -78,8 +98,9 @@ export default class Controls {
     this.yawObject.position.x = 1000;
     this.yawObject.position.y = 1000;
     this.yawObject.position.z = 1000;
-    this.pitchObject.rotateX(100);
-    this.yawObject.rotateY(1);
+
+    this.pitchObject.rotateX(-0.72);
+    this.yawObject.rotateY(0.6);
   }
 
 
@@ -87,9 +108,7 @@ export default class Controls {
    * Lock change event
    */
   private lockChange() {
-    if (document.pointerLockElement) {
-
-    } else {
+    if (!document.pointerLockElement) {
       this.activeLook = false;
     }
   }
