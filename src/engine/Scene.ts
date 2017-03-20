@@ -15,7 +15,7 @@ export default class Scene extends THREE.Scene {
     this.main = main;
     this.meshes = [];
     this.defaultMaterial = new THREE.MeshBasicMaterial({ color: 0xff00ff, transparent: true, opacity: 1, wireframe: true });
-    this.setCamera(main.camera);
+    this.addCamera(main.camera);
     this.initLight();
     this.initMeshes();
     this.initTerrain();
@@ -26,8 +26,8 @@ export default class Scene extends THREE.Scene {
    * Sets camera object in the scene
    * @param camera
    */
-  setCamera(camera: Camera) {
-    this.add(camera.controls.getYawObject());
+  addCamera(camera: Camera) {
+    this.add(camera.controls.getCamera());
   }
 
 

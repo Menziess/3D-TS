@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import Main from './Main';
 
 
@@ -27,7 +28,8 @@ export default class Menu {
 
     this.elements['selectSpawn'].addEventListener("click", () => {
       this.elements['selectSpawn'].blur();
-      this.main.camera.controls.getYawObject().position.set(-328, 568, 800);
+      this.main.camera.controls.setPosition(new THREE.Vector3(-328, 568, 800));
+      this.main.camera.controls.setRotation(new THREE.Euler(-0.62, -0.30, 0.00));
       this.main.renderer.render(this.main.scene, this.main.camera);
     }, false);
   }

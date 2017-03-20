@@ -39,9 +39,9 @@ export default class Controls {
 
 
   /**
-   * Get camera's yawobject
+   * Returns yawObject
    */
-  public getYawObject() {
+  public getCamera() {
     return this.yawObject;
   }
 
@@ -63,6 +63,24 @@ export default class Controls {
     return [this.pitchObject.rotation.x, this.yawObject.rotation.y, 0].map((number) => {
       return number.toFixed(2);
     });
+  }
+
+
+  /**
+   * Set camera position
+   */
+  public setPosition(position: THREE.Vector3) {
+    this.yawObject.position.set(position.x, position.y, position.z);
+  }
+
+
+  /**
+   * Get array of pitch rotation
+   */
+  public setRotation(rotation: THREE.Euler) {
+    console.log(rotation);
+    this.pitchObject.rotation.x = rotation.x;
+    this.yawObject.rotation.y = rotation.y;
   }
 
 

@@ -17,6 +17,14 @@ export default class Camera extends THREE.PerspectiveCamera {
 
 
     /**
+     * Returns yawObject
+     */
+    public getCamera() {
+        return this.controls.getCamera();
+    }
+
+
+    /**
      * Step
      * @param delta 
      */
