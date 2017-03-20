@@ -75,7 +75,11 @@ export default class Controls {
 
     this.yawObject.add(this.pitchObject);
     this.pitchObject.add(this.camera);
-    this.yawObject.position.y = 10;
+    this.yawObject.position.x = 1000;
+    this.yawObject.position.y = 1000;
+    this.yawObject.position.z = 1000;
+    this.pitchObject.rotateX(100);
+    this.yawObject.rotateY(1);
   }
 
 

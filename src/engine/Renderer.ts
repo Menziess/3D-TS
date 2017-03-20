@@ -38,32 +38,41 @@ export default class Renderer extends THREE.WebGLRenderer {
 
 
   /**
-   * Apply shaders to mesh
+   * Generator getting shaders
    * @param mesh
+   * @param callback
+   */
+  public * shadersGenerator(shaders: string[]) {
+    if (!this.enableShaders) return;
+    let vertexShader = yield this.shaders.getShader(shaders[0]);
+    return this.shaders.getShader(shaders[1]);
+  }
+
+
+  /**
+   * Apply shaders to mesh
+   * @param mesh 
+   * @param callback 
+   * @param args 
    */
   public applyShaders(mesh: THREE.Mesh, callback) {
-    if (!this.enableShaders) return;
 
-    let vertexShader;
-    let fragmentShader;
+    const generator = this.shadersGenerator(['vertex', 'fragment']);
 
-    this.shaders.getShader('vertex').then((shader) => {
-
-      vertexShader = shader;
-
-    }).then(this.shaders.getShader('fragment').then((shader) => {
-
-      fragmentShader = shader;
+    let first = generator.next();
+    let second = generator.next(first);
+    
+    Promise.all([first.value, second.value]).then((shaders) => {
 
       mesh.material = new THREE.ShaderMaterial({
         uniforms: {
           delta: { value: 0 }
         },
-        vertexShader: vertexShader,
-        fragmentShader: fragmentShader,
+        vertexShader: shaders[0],
+        fragmentShader: shaders[1],
       });
 
       callback();
-    }));
+    });
   }
 }
