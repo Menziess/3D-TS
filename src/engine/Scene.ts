@@ -18,7 +18,7 @@ export default class Scene extends THREE.Scene {
     this.addCamera(main.camera);
     this.initLight();
     this.initMeshes();
-    this.initTerrain();
+    this.initWater();
   }
 
 
@@ -57,13 +57,22 @@ export default class Scene extends THREE.Scene {
     mesh.position.set(0, geometry.parameters.height / 2, -500);
     this.meshes['cube'] = mesh;
     this.add(mesh);
+
+    this.main.renderer.applyShaders(mesh, () => {
+      let height = new Float32Array(geometry.getAttribute('position').count);
+      for (let i = 0; i < height.length; i++) {
+        height[i] = Math.sin(i);
+      }
+
+      geometry.addAttribute('height', new THREE.BufferAttribute(height, 1));
+    });
   }
 
 
   /**
    * Initializes terrain
    */
-  initTerrain() {
+  initWater() {
     const geometry = new THREE.PlaneBufferGeometry(window.innerWidth, window.innerHeight, 40);
 
     let mesh = new THREE.Mesh(geometry, this.defaultMaterial);

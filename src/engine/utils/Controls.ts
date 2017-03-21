@@ -78,7 +78,6 @@ export default class Controls {
    * Get array of pitch rotation
    */
   public setRotation(rotation: THREE.Euler) {
-    console.log(rotation);
     this.pitchObject.rotation.x = rotation.x;
     this.yawObject.rotation.y = rotation.y;
   }
