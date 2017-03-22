@@ -10,7 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "start http://localhost:3000 && nodemon --watch dist dist/app-server.js",
     "electron": "electron dist/app-client.js",
-    "watchify": "watchify dist/engine/main.js -o public/js/bundle.js",
+    "watchify": "mkdirp public/js && watchify dist/engine/main.js -o public/js/bundle.js",
     "compile": "tsc",
     "dev": "concurrently --kill-others \"tsc --watch\" \"npm run watchify\" \"npm run start\"",
     "watch": "concurrently --kill-others \"tsc --watch\" \"npm run watchify\""
