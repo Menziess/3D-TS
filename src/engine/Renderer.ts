@@ -55,7 +55,7 @@ export default class Renderer extends THREE.WebGLRenderer {
    * @param callback 
    * @param args 
    */
-  public applyShaders(mesh: THREE.Mesh, callback) {
+  public applyShaders(mesh: THREE.Mesh, callback?) {
 
     const generator = this.shadersGenerator(['vertex', 'fragment']);
 
@@ -72,7 +72,7 @@ export default class Renderer extends THREE.WebGLRenderer {
         fragmentShader: shaders[1],
       });
 
-      callback();
+      if (callback) callback();
     });
   }
 }

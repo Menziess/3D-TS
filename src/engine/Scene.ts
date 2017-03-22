@@ -41,9 +41,6 @@ export default class Scene extends THREE.Scene {
     const point = new THREE.PointLight(0xffffff, 0.5);
     point.position.set(-2000, 2000, 2000);
     this.add(point);
-
-    let vs = document.getElementById('vs')!;
-    let fs = document.getElementById('fs')!;
   }
 
 
@@ -56,16 +53,9 @@ export default class Scene extends THREE.Scene {
     let mesh = new THREE.Mesh(geometry, material);
     mesh.position.set(0, geometry.parameters.height / 2, -500);
     this.meshes['cube'] = mesh;
+    this.main.renderer.applyShaders(mesh);
     this.add(mesh);
 
-    this.main.renderer.applyShaders(mesh, () => {
-      let height = new Float32Array(geometry.getAttribute('position').count);
-      for (let i = 0; i < height.length; i++) {
-        height[i] = Math.sin(i);
-      }
-
-      geometry.addAttribute('height', new THREE.BufferAttribute(height, 1));
-    });
   }
 
 
@@ -101,7 +91,7 @@ export default class Scene extends THREE.Scene {
     // Water
     if (this.meshes['water'].material['uniforms']) {
       this.meshes['water'].material.uniforms.delta.value += delta;
-      this.meshes['water'].geometry.attributes.height.needsUpdate = true;
+      // this.meshes['water'].geometry.attributes.height.needsUpdate = true;
     }
 
     // CUBE
