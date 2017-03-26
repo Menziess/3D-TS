@@ -3,11 +3,13 @@ attribute float height;
 uniform float delta; 
 
 varying float vOpacity;
+varying vec3 vNormal;
 
 
 void main() { 
 
   vOpacity = height;
+  vNormal = normal + sin(height);
 
   vec3 p = position; 
 

@@ -2,13 +2,26 @@
 uniform float delta; 
 
 varying float vOpacity;
+varying vec3 vNormal;
 
 
 void main() { 
 
-  float r = 0.0;
-  float g = 0.5; 
-  float b = 1.0; 
-  
-  gl_FragColor = vec4(r, g, b, vOpacity); 
+  // calc the dot product and clamp
+  // 0 -> 1 rather than -1 -> 1
+  vec3 light = vec3(0.5, 0.2, 1.0);
+
+  // ensure it's normalized
+  light = normalize(light);
+
+  // calculate the dot product of
+  // the light to the vertex normal
+  float dProd = max(0.0,
+                    dot(vNormal, light));
+
+  // feed into our frag colour
+  gl_FragColor = vec4(0.0, // R
+                      1.0, // G
+                      dProd, // B
+                      vOpacity);  // A
 }
